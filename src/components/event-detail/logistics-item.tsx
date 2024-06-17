@@ -1,7 +1,7 @@
 import classes from "./logistics-item.module.css";
 
 export interface LogisticsItemProps {
-  icon: string;
+  icon: React.ElementType;
   children: React.ReactNode;
 }
 
