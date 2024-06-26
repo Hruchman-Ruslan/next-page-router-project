@@ -1,5 +1,8 @@
 import { Fragment } from "react";
+
 import type { GetStaticPropsContext } from "next";
+
+import Head from "next/head";
 
 import { getEventById, getFeaturedEvents } from "@/helpers/api-util";
 
@@ -28,6 +31,10 @@ export default function EventDetailPage({
 
   return (
     <Fragment>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
