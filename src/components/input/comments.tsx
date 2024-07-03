@@ -8,17 +8,19 @@ import NewComment from "./new-comments";
 import CommentList from "./comment-list";
 
 export interface CommentsProps {
-  eventsId: string[];
+  eventId: string;
 }
 
-export default function Comments({ eventsId }: CommentsProps) {
+export default function Comments({ eventId }: CommentsProps) {
   const [showComments, setShowComments] = useState(false);
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
   }
 
-  function addCommentHandler(commentData: IComment) {}
+  function addCommentHandler(commentData: IComment) {
+    //   send data to api
+  }
 
   return (
     <section className={classes.comments}>

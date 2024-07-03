@@ -11,6 +11,7 @@ import { Event } from "@/types/event";
 import EventSummary from "@/components/event-detail/event-summary";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventContent from "@/components/event-detail/event-content";
+import Comments from "@/components/input/comments";
 
 export interface EventDetailPageProps {
   selectedEvent: Event;
@@ -45,6 +46,7 @@ export default function EventDetailPage({
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </Fragment>
   );
 }

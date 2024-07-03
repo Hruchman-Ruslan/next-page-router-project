@@ -8,13 +8,13 @@ export default function CommentList({}: CommentListProps) {
       <li>
         <p>My comment is amazing!</p>
         <div>
-          By <address>Maximilian</address>
+          By <address>Ruslan</address>
         </div>
       </li>
       <li>
         <p>My comment is amazing!</p>
         <div>
-          By <address>Maximilian</address>
+          By <address>Ruslan</address>
         </div>
       </li>
     </ul>
