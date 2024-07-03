@@ -5,6 +5,7 @@ import { getFeaturedEvents } from "@/helpers/api-util";
 import { Event } from "@/types/event";
 
 import EventList from "@/components/events/event-list";
+import NewsLetterRegistration from "@/components/input/newsletter-registration";
 
 export interface HomePageProps {
   events: Event[];
@@ -20,6 +21,7 @@ export default function HomePage({ events }: HomePageProps) {
           content="Find a lot of great events that allow you to avolve..."
         />
       </Head>
+      <NewsLetterRegistration />
       <EventList items={events} />
     </div>
   );
