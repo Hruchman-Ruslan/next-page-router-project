@@ -1,22 +1,22 @@
+import { IComment } from "@/types/comments";
+
 import classes from "./comments-list.module.css";
 
-export interface CommentListProps {}
+export interface CommentListProps {
+  items: IComment[];
+}
 
-export default function CommentList({}: CommentListProps) {
+export default function CommentList({ items }: CommentListProps) {
   return (
     <ul className={classes.comments}>
-      <li>
-        <p>My comment is amazing!</p>
-        <div>
-          By <address>Ruslan</address>
-        </div>
-      </li>
-      <li>
-        <p>My comment is amazing!</p>
-        <div>
-          By <address>Ruslan</address>
-        </div>
-      </li>
+      {items.map(({ id, text, name }) => (
+        <li key={id}>
+          <p>{text}</p>
+          <div>
+            By <address>{name}</address>
+          </div>
+        </li>
+      ))}
     </ul>
   );
 }

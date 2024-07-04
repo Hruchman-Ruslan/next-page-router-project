@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { IComment } from "@/types/comments";
 
@@ -13,13 +13,32 @@ export interface CommentsProps {
 
 export default function Comments({ eventId }: CommentsProps) {
   const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<IComment[]>([]);
+
+  useEffect(() => {
+    if (showComments) {
+      fetch("/api/comments/" + eventId)
+        .then((response) => response.json())
+        .then((data) => {
+          setComments(data.comments);
+        });
+    }
+  }, [showComments, eventId]);
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
   }
 
   function addCommentHandler(commentData: IComment) {
-    //   send data to api
+    fetch("/api/comments/" + eventId, {
+      method: "POST",
+      body: JSON.stringify(commentData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   }
 
   return (
@@ -28,7 +47,7 @@ export default function Comments({ eventId }: CommentsProps) {
         {showComments ? "Hide" : "Show"} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList />}
+      {showComments && <CommentList items={comments} />}
     </section>
   );
 }
