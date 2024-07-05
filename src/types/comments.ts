@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export interface IComment {
-  id?: string;
+  _id?: ObjectId;
   email: string;
   name: string;
   text: string;

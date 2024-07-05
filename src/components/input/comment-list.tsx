@@ -9,8 +9,8 @@ export interface CommentListProps {
 export default function CommentList({ items }: CommentListProps) {
   return (
     <ul className={classes.comments}>
-      {items.map(({ id, text, name }) => (
-        <li key={id}>
+      {items.map(({ _id, text, name }) => (
+        <li key={_id?.toString()}>
           <p>{text}</p>
           <div>
             By <address>{name}</address>
