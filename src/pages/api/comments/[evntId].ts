@@ -4,7 +4,7 @@ import { IComment } from "@/types/comments";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
-const { MONGO_EVENTS } = process.env;
+const MONGO_EVENTS = process.env.MONGO_EVENTS as string;
 
 export default async function handler(
   req: NextApiRequest,
@@ -43,20 +43,28 @@ export default async function handler(
 
     const result = await db.collection("comments").insertOne(newComment);
 
-    console.log(result);
+    const insertedComment: IComment = {
+      ...newComment,
+      _id: result.insertedId,
+    };
 
-    newComment.id = result.insertedId.toString();
-
-    res.status(201).json({ message: "Added comment.", comment: newComment });
+    res
+      .status(201)
+      .json({ message: "Added comment.", comment: insertedComment });
   }
 
   if (req.method === "GET") {
-    const dummyList = [
-      { id: "c1", name: "Ruslan", text: "A first comment" },
-      { id: "c2", name: "Manuel", text: "A second comment" },
-    ];
+    const db = client.db();
 
-    res.status(200).json({ comments: dummyList });
+    const documents = await db
+      .collection("comments")
+      .find()
+      .sort({ _id: -1 })
+      .toArray();
+
+    console.log(documents);
+
+    res.status(200).json({ comments: documents });
   }
 
   client.close();
