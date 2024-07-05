@@ -1,5 +1,6 @@
-import { IComment } from "@/types/comments";
 import { MongoClient } from "mongodb";
+
+import { IComment } from "@/types/comments";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
