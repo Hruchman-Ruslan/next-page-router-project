@@ -1,7 +1,22 @@
+import { MongoClient } from "mongodb";
+
+import { IComment } from "@/types/comments";
+
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const eventId = req.query.eventId;
+const { MONGO_EVENTS } = process.env;
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const eventId = req.query.eventId as string;
+
+  if (!MONGO_EVENTS) {
+    throw new Error("MONGO_EVENTS environment variable is not defined");
+  }
+
+  const client = await MongoClient.connect(MONGO_EVENTS);
 
   if (req.method === "POST") {
     const { email, name, text } = req.body;
@@ -17,14 +32,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return;
     }
 
-    const newComment = {
-      id: new Date().toISOString(),
+    const newComment: IComment = {
       email,
       name,
       text,
+      eventId,
     };
 
-    console.log(newComment);
+    const db = client.db();
+
+    const result = await db.collection("comments").insertOne(newComment);
+
+    console.log(result);
+
+    newComment.id = result.insertedId.toString();
 
     res.status(201).json({ message: "Added comment.", comment: newComment });
   }
@@ -37,4 +58,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     res.status(200).json({ comments: dummyList });
   }
+
+  client.close();
 }

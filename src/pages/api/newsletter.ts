@@ -2,7 +2,7 @@ import { MongoClient } from "mongodb";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
-const { MONGO_URI } = process.env;
+const { MONGO_NEWSLETTER } = process.env;
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +16,7 @@ export default async function handler(
       return;
     }
 
-    if (!MONGO_URI) {
+    if (!MONGO_NEWSLETTER) {
       res
         .status(500)
         .json({ message: "MongoDB connection string is not defined" });
@@ -24,10 +24,10 @@ export default async function handler(
     }
 
     try {
-      const client = await MongoClient.connect(MONGO_URI);
+      const client = await MongoClient.connect(MONGO_NEWSLETTER);
       const db = client.db();
 
-      await db.collection("emails").insertOne({ email: userEmail });
+      await db.collection("newsletter").insertOne({ email: userEmail });
 
       client.close();
 
