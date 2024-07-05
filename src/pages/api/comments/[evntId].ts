@@ -4,7 +4,7 @@ import { IComment } from "@/types/comments";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
-const { MONGO_EVENTS } = process.env;
+const MONGO_EVENTS = process.env.MONGO_EVENTS as string;
 
 export default async function handler(
   req: NextApiRequest,

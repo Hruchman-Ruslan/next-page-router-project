@@ -2,7 +2,22 @@ import { MongoClient } from "mongodb";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
-const { MONGO_NEWSLETTER } = process.env;
+const MONGO_NEWSLETTER = process.env.MONGO_NEWSLETTER as string;
+
+async function connectDatabase() {
+  const client = await MongoClient.connect(MONGO_NEWSLETTER);
+
+  return client;
+}
+
+async function insertedDocument(
+  client: MongoClient,
+  documents: { email: string }
+) {
+  const db = client.db();
+
+  await db.collection("newsletter").insertOne({ email: documents });
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,26 +31,22 @@ export default async function handler(
       return;
     }
 
-    if (!MONGO_NEWSLETTER) {
-      res
-        .status(500)
-        .json({ message: "MongoDB connection string is not defined" });
+    let client;
+
+    try {
+      client = await connectDatabase();
+    } catch (error) {
+      res.status(500).json({ message: "Connected to the database failed!" });
       return;
     }
 
     try {
-      const client = await MongoClient.connect(MONGO_NEWSLETTER);
-      const db = client.db();
-
-      await db.collection("newsletter").insertOne({ email: userEmail });
-
+      await insertedDocument(client, { email: userEmail });
       client.close();
-
-      res.status(201).json({ message: "Signed Up!" });
     } catch (error) {
-      res.status(500).json({ message: "Error connecting to the database" });
+      res.status(500).json({ message: "Inserting data failed!" });
     }
-  } else {
-    res.status(405).json({ message: "Method Not Allowed" });
+
+    res.status(201).json({ message: "Signed Up!" });
   }
 }
