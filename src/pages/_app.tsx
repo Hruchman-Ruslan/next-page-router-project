@@ -2,8 +2,6 @@ import Head from "next/head";
 
 import Layout from "@/components/layout/layout";
 
-import Notification from "@/components/ui/notification";
-
 import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
@@ -23,7 +21,6 @@ export default function App({ Component, pageProps }: AppProps) {
           />
         </Head>
         <Component {...pageProps} />
-        <Notification title="Test" message="This is a test." status="success" />
       </Layout>
     </NotificationContextProvider>
   );
